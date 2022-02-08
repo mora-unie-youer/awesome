@@ -1,9 +1,40 @@
+local mouse, root, screen = mouse, root, screen
+
 local gears = require('gears')
 local awful = require('awful')
 
 local keys = {}
 
-local function build_grabber(screen, options)
+local function send_trigger(grabber, mod, key)
+	-- Fetching current global keybindings
+	local global_keys = root.keys()
+	-- Stopping keygrabber and clearing the keybindings
+	grabber:stop()
+	root.keys({})
+
+	-- Translate mod keys
+	local tmod = {}
+	for i, m in ipairs(mod) do
+		if     m == 'Mod4' then m = 'Super_L'
+		elseif m == 'Mod1' then m = 'Alt_L'
+		else                    m = m .. '_L' end
+		tmod[i] = m
+	end
+
+	-- Pressing required mod keys
+	for _, m in ipairs(tmod) do root.fake_input('key_press', m) end
+	-- Pressing key
+	root.fake_input('key_press', key)
+	-- Releasing key
+	root.fake_input('key_release', key)
+	-- Releasing mod keys
+	for _, m in ipairs(tmod) do root.fake_input('key_release', m) end
+
+	-- Restoring global keybindings
+	root.keys(global_keys)
+end
+
+local function build_grabber(s, options)
 	-- Configuration of exit keybinding
 	local exit = options.exit or { mod = { 'Control' }, key = 'g' }
 	local exit_mod = exit.mod
@@ -16,6 +47,24 @@ local function build_grabber(screen, options)
 		function() grabber:stop() end,
 		{ description = 'Exit the map', group = options.name }
 	)
+	-- Adding trigger keybinding
+	if options.trigger then
+		grabber:add_keybinding(
+			{}, options[2],
+			function()
+				-- We need to send trigger after a small timeout
+				gears.timer({
+					timeout = 0.2,
+					autostart = true,
+					single_shot = true,
+					callback = function()
+						send_trigger(grabber, options[1], options[2])
+					end
+				})
+			end,
+			{ description = 'Send trigger', group = options.name }
+		)
+	end
 	-- Adding specified keymappings
 	for _, mapping in ipairs(options.map) do
 		-- Checking if key binding is not another map (then it must have action)
@@ -30,8 +79,7 @@ local function build_grabber(screen, options)
 			--  We have another map. We need to create new grabber, and make the same
 			-- procedure for it
 			local subgrabber = build_grabber(
-				screen,
-				gears.table.join(mapping, { exit = exit })
+				s, gears.table.join(mapping, { exit = exit })
 			)
 			-- Adding keybinding to start subgrabber
 			grabber:add_keybinding(

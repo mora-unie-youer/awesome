@@ -32,6 +32,7 @@ local keybindings = {
 	-- Root keymap
 	{ 'Control' }, 't',
 	name = 'Root',
+	trigger = true,
 	map = {
 		{ {}, 'c', 'Terminal', action = function() awful.spawn(terminal) end },
 		{
