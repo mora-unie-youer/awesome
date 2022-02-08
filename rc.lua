@@ -6,6 +6,8 @@ local gears = require('gears')
 local awful = require('awful')
 -- Loading autofocus
 require('awful.autofocus')
+-- Keybindings module
+local keys = require('keys')
 
 -- Default terminal and editor
 terminal		= os.getenv('TERMINAL') or 'st'
@@ -24,3 +26,35 @@ awful.layout.layouts = {
 awful.screen.connect_for_each_screen(function(s)
 	awful.tag({ '1', '2', '3', '4', '5', '6', '7', '8', '9' }, s, awful.layout.layouts[1])
 end)
+
+-- Setting up keybindings
+local keybindings = {
+	-- Root keymap
+	{ 'Control' }, 't',
+	name = 'Root',
+	map = {
+		{ {}, 'c', 'Terminal', action = function() awful.spawn(terminal) end },
+		{
+			-- First submap
+			{ 'Control'}, 'r',
+			name = 'First submap',
+			map = {
+				{
+					-- Second submap
+					{}, 'w',
+					name = 'Second submap',
+					map = {
+						{ {}, 'k', 'Terminal', action = function() awful.spawn(terminal) end },
+					}
+				},
+			},
+		}
+	},
+}
+-- Global keybindings
+globalkeys = gears.table.join(
+	-- awful.key({ 'Control' }, 'Return', function() awful.spawn(terminal) end),
+	keys.create(keybindings)
+)
+-- Setting keys
+root.keys(globalkeys)
