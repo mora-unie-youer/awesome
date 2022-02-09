@@ -29,8 +29,34 @@ awful.layout.layouts = {
 	awful.layout.suit.floating,
 }
 
+local function set_wallpaper(s)
+	-- Checking if wallpaper is set
+	if beautiful.wallpaper then
+		-- Checking if wallpaper is string
+		if type(beautiful.wallpaper) == 'string' then
+			-- Check if wallpaper is color/image
+			if beautiful.wallpaper:sub(1, #'#') == '#' then
+				-- Setting color wallpaper
+				gears.wallpaper.set(beautiful.wallpaper)
+			elseif beautiful.wallpaper:sub(1, #'/') == '/' then
+				-- Setting image wallpaper
+				gears.wallpaper.maximized(beautiful.wallpaper, s)
+			end
+		else
+			-- Wallpaper is function
+			beautiful.wallpaper(s)
+		end
+	end
+end
+
+-- Resetting wallpaper on screen's geometry changes
+screen.connect_signal('property::geometry', set_wallpaper)
+
 -- Loading screens
 awful.screen.connect_for_each_screen(function(s)
+	-- Setting wallpaper
+	set_wallpaper(s)
+
 	awful.tag({ '1', '2', '3', '4', '5', '6', '7', '8', '9' }, s, awful.layout.layouts[1])
 end)
 

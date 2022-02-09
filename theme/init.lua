@@ -6,6 +6,8 @@ local icon_path = theme_dir .. 'icons/'
 -- Theme table
 local theme = {}
 
+theme.wallpaper = '~/.wallpaper.jpg'
+
 -- Titlebar
 theme.titlebar_size = 20
 -- Titlebar buttons
