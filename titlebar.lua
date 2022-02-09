@@ -7,16 +7,15 @@ local wibox = require('wibox')
 awful.titlebar.enable_tooltip = false
 
 local function create_click_events(client)
-	gears.debug.dump(client, 'client', 5)
 	return gears.table.join(
 		-- TODO: implement double click events
 		-- Left click to move
 		awful.button({}, 1, function()
-			client:activate { context = 'titlebar', action = 'mouse_move' }
+			awful.mouse.client.move(client)
 		end),
 		-- Right click to resize
 		awful.button({}, 3, function()
-			client:activate { context = 'titlebar', action = 'mouse_resize' }
+			awful.mouse.client.resize(client)
 		end)
 	)
 end
