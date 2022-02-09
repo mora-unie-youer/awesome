@@ -1,7 +1,7 @@
 -- Standard awesome library
 local mouse, root, screen = mouse, root, screen
-local gears = require('gears')
 local awful = require('awful')
+local gears = require('gears')
 
 local keys = {}
 

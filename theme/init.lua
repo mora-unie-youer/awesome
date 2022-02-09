@@ -9,7 +9,9 @@ local theme = {}
 theme.wallpaper = '~/.wallpaper.jpg'
 
 -- Titlebar
-theme.titlebar_size = 20
+theme.titlebar_bg       = '#FF00FF33'
+theme.titlebar_position = 'left'
+theme.titlebar_size     = 16
 -- Titlebar buttons
 theme.titlebar_close_button_normal              = icon_path .. 'close.svg'
 theme.titlebar_close_button_normal_hover        = icon_path .. 'close.svg'

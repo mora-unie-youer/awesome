@@ -1,5 +1,6 @@
 -- Standard awesome library
 local awful = require('awful')
+local beautiful = require('beautiful')
 local gears = require('gears')
 local wibox = require('wibox')
 
@@ -57,5 +58,10 @@ local function create_vertical_bar(client, position, background, size)
 end
 
 client.connect_signal('request::titlebars', function(c)
-	create_vertical_bar(c, 'left', '#FF00FF99', 20)
+	create_vertical_bar(
+		c,
+		beautiful.titlebar_position,
+		beautiful.titlebar_bg,
+		beautiful.titlebar_size
+	)
 end)
