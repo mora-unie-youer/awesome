@@ -6,6 +6,10 @@ local gears = require('gears')
 local awful = require('awful')
 -- Loading autofocus
 require('awful.autofocus')
+-- Loading titlebars
+require('titlebar')
+-- Loading window rules
+require('rules')
 -- Keybindings module
 local keys = require('keys')
 
