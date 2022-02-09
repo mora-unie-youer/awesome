@@ -4,8 +4,11 @@ pcall(require, 'luarocks.loader')
 -- Standard awesome library
 local gears = require('gears')
 local awful = require('awful')
+local beautiful = require('beautiful')
 -- Loading autofocus
 require('awful.autofocus')
+-- Loading theme
+beautiful.init(require('theme'))
 -- Loading titlebars
 require('titlebar')
 -- Loading window rules
